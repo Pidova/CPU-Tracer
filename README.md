@@ -5,7 +5,7 @@ A header-only C++ library for loading, reconstructing, and analyzing CPU executi
 ## Example Usage: Instruction Frequency Profile
 
 Below is the distribution of the 25 most common x86 instructions executed during a Windows Vista boot-to-usage trace. 
-This profile provides insight into the instruction composition across more than 8.3 million tracked instructions.
+This profile provides insight into the instruction composition across more than 4.4 million tracked instructions.
 ```text
 mov    [ 35.9%] ##############                           1588665
 call   [  6.3%] ##                                       278470
