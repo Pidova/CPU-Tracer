@@ -2,12 +2,38 @@
 
 A header-only C++ library for loading, reconstructing, and analyzing CPU execution traces.
 
-## Reconstructed Control Flow Graph (CFG) Example
-The library turns thousands of raw execution blocks and branch edges into an graph structure:
+## Example Usage: Instruction Frequency Profile
 
-![CFG](docs/pics/CFG.png)
+Below is the distribution of the 25 most common x86 instructions executed during a Windows Vista boot-to-usage trace. 
+This profile provides insight into the instruction composition across more than 8.3 million tracked instructions.
+```text
+mov    [ 35.9%] ##############                           1588665
+call   [  6.3%] ##                                       278470
+lea    [  6.3%] ##                                       277325
+cmp    [  5.7%] ##                                       251354
+je     [  4.7%] #                                        207601
+test   [  4.5%] #                                        197455
+add    [  3.6%] #                                        158900
+xor    [  3.5%] #                                        154274
+jne    [  3.4%] #                                        150383
+push   [  3.1%] #                                        135227
+dec    [  2.8%] #                                        122873
+pop    [  2.6%] #                                        115388
+sub    [  2.4%]                                          106038
+jmp    [  2.0%]                                          86519
+and    [  1.7%]                                          76460
+ret    [  1.5%]                                          67016
+movzx  [  1.4%]                                          60790
+inc    [  1.2%]                                          54734
+js     [  0.6%]                                          25237
+jb     [  0.6%]                                          24856
+or     [  0.5%]                                          24151
+shr    [  0.4%]                                          19847
+nop    [  0.4%]                                          19652
+jae    [  0.4%]                                          16983
+shl    [  0.4%]                                          16173
+```
 
-**Part of a generated trace from boot to normal usage of Windows Vista, Contains over 4 million nodes and 3 million edges**
 
 ## Overview
 
