@@ -1,4 +1,5 @@
 # CPU-Tracer
+
 A header-only C++ library for loading, reconstructing, and analyzing CPU execution traces.
 
 ## Overview
@@ -13,6 +14,7 @@ Includes:
 * **Graph Construction** – Build a deterministic ```boost::adjacency_list``` CFG from analyzed blocks and edges.
 
 ## Importing
+
 Importing all library functions just requires
 ```
 #include "cpu_tracer/common.hpp"
@@ -28,6 +30,7 @@ MAX Len is maximum size the data is expected to have, stored as an contigous arr
 - [Boost smart pointers, vectors, maps](https://www.boost.org/)
 
 ## Documentation and Examples
+
 All documentation and examples for each can be found:
 
 - [Block Format](docs/blocks.md) – The on-disk layout of blocks, instructions, trace records, and terminology

@@ -133,7 +133,7 @@ for (const auto &[src, dsts] : edata.successors) {
 }
 ```
 
-Output (illustrative, depends on the trace contents):
+Output:
 
 ```
 Loaded 3 blocks, 4 after splitting

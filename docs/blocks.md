@@ -1,4 +1,5 @@
 # Blocks
+
 Lightweight, header-only, fast C++ tool used to serialize basic blocks and trace data to disk.
 
 ## What is a Block?
