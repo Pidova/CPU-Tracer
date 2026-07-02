@@ -2,6 +2,13 @@
 
 A header-only C++ library for loading, reconstructing, and analyzing CPU execution traces.
 
+## Reconstructed Control Flow Graph (CFG) Example
+The library turns thousands of raw execution blocks and branch edges into an graph structure:
+
+![CFG](docs/pics/CFG.png)
+
+**Part of a generated trace from boot to normal usage of Windows Vista, Contains over 4 million nodes and 3 million edges**
+
 ## Overview
 
 Lightweight, header-only C++ library for working with raw per-block execution traces emitted using a dynamic binary instrumentation.
@@ -12,12 +19,6 @@ Includes:
 * **Block Format** – Self-describing, tagged binary format for basic blocks, instructions, edges, interrupts, VCPU states, and MMIO/Special Memory accesses, with LZ4-compressed edges.
 * **Loading & Analysis** – Stream a trace file into memory, sort and index blocks by global ID and real PC, and reconstruct successor/predecessor edges from raw execution data, interrupts, and self-modifying/retranslated blocks.
 * **Graph Construction** – Build a deterministic ```boost::adjacency_list``` CFG from analyzed blocks and edges.
-
-### Reconstructed Control Flow Graph (CFG) Example
-The library turns thousands of raw execution blocks and branch edges into an graph structure:
-
-![CFG](docs/pics/CFG.png)
-**Part of a generated trace from boot to normal usage of Windows Vista, Contains over 4 million nodes and 3 million edges**
 
 ## Importing
 
