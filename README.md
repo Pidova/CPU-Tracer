@@ -13,6 +13,12 @@ Includes:
 * **Loading & Analysis** – Stream a trace file into memory, sort and index blocks by global ID and real PC, and reconstruct successor/predecessor edges from raw execution data, interrupts, and self-modifying/retranslated blocks.
 * **Graph Construction** – Build a deterministic ```boost::adjacency_list``` CFG from analyzed blocks and edges.
 
+### Reconstructed Control Flow Graph (CFG) Example
+The library turns thousands of raw execution blocks and branch edges into an graph structure:
+
+![CFG](docs/pics/CFG.png)
+**Part of a generated trace from boot to normal usage of Windows Vista, Contains over 4 million nodes and 3 million edges**
+
 ## Importing
 
 Importing all library functions just requires
