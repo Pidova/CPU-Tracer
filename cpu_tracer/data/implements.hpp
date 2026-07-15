@@ -75,7 +75,7 @@ namespace cpu_tracer {
             };
       } // namespace archs
 
-     namespace check {
+      namespace check {
 
             /* Save types */
             static_assert(std::is_same_v<std::underlying_type_t<save_type>, std::uint8_t>, "save_type must use std::uint8_t as its underlying type.");

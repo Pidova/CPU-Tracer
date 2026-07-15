@@ -69,3 +69,4 @@ All documentation and examples for each can be found:
 - [Block Format](docs/blocks.md) – The on-disk layout of blocks, instructions, trace records, and terminology
 - [Loading & Analysis](docs/loading_and_analysis.md) – Stream a trace file into memory and reconstruct its edges
 - [Graph Construction](docs/graph.md) – Build a Boost Graph Library CFG from analyzed trace data
+- [Block Building](docs/building.md) – Construct blocks and control-flow edges manually, without a trace file
