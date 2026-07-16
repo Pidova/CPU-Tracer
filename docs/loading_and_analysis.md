@@ -54,8 +54,8 @@ A single loop peeks the next save_type tag and dispatches: block records are hea
 edge_map, vcpu_states, interrupts, and MMIO records are appended into their own containers; a none tag steps past a skip marker. 
 Loading is one linear pass over the file, with backtracking only where a record's own reader rewinds.
 
-- Time – O(N) in total bytes read
-- Memory – O(N) for the resulting in-memory containers
+- Time - O(N) in total bytes read
+- Memory - O(N) for the resulting in-memory containers
 
 ### Block indexing (analyze::analyze over analyzed_data)
 
@@ -64,22 +64,22 @@ Each loaded block's instructions are indexed into inst_map by virtual PC, and th
 interrupts and VCPU states are separately sorted by curr_global_block_id so later passes can walk them in execution order. 
 Finally, real_pc_map is built so any instruction's real PC resolves directly to its owning block.
 
-- Time – O(N log N), dominated by the three sorts; O(N) for the indexing passes
-- Memory – O(N) for the index and sorted-copy containers
+- Time - O(N log N), dominated by the three sorts; O(N) for the indexing passes
+- Memory - O(N) for the index and sorted-copy containers
 
 ### Edge reconstruction (analyze::analyze over edge_data)
 
 This pass merges three sources of control flow into one edge map:
 
-1. Raw edge records – every jmp_loc loaded from the trace's edge_map is emitted directly as a next edge.
-2. Sequential execution – walking blocks in sorted global-ID order, an instruction whose prev_real_pc doesn't chain from the previous instruction is emitted as a next edge from prev_real_pc to real_pc. This stitches control flow across block boundaries.
-3. Interrupts – walked alongside the sorted blocks by curr_global_block_id. An interrupt's source virtual address is resolved to a real PC and emitted as a signaled edge to the interrupt's destination. If the source vaddr isn't resolved yet, it's parked and retried once more instructions are indexed.
+1. Raw edge records - every jmp_loc loaded from the trace's edge_map is emitted directly as a next edge.
+2. Sequential execution - walking blocks in sorted global-ID order, an instruction whose prev_real_pc doesn't chain from the previous instruction is emitted as a next edge from prev_real_pc to real_pc. This stitches control flow across block boundaries.
+3. Interrupts - walked alongside the sorted blocks by curr_global_block_id. An interrupt's source virtual address is resolved to a real PC and emitted as a signaled edge to the interrupt's destination. If the source vaddr isn't resolved yet, it's parked and retried once more instructions are indexed.
 
 Each edge is inserted into both successors and predecessor at once; if the same source/destination pair already exists, its kind bits are updated rather than 
 duplicated, so an edge that's both directly observed and inferred is recorded once.
 
-- Time – O(N) amortized; pending-interrupt retries are bounded by the number of unresolved addresses
-- Memory – O(E) for the successor/predecessor maps, where E is the number of distinct edges
+- Time - O(N) amortized; pending-interrupt retries are bounded by the number of unresolved addresses
+- Memory - O(E) for the successor/predecessor maps, where E is the number of distinct edges
 
 ### Block splitting (tools::fix_blocks)
 
@@ -87,8 +87,8 @@ Because edges are reconstructed independently of the original block boundaries, 
 (e.g. a backward branch into a loop body traced as one larger block). For every successor address that resolves into the interior of a block, fix_blocks 
 finds its instruction offset, splits the block at that offset, re-registers the new block in real_pc_map, and assigns it the next available ID.
 
-- Time – O(```S * N```), where S is the number of split sites and N is the average block size
-- Memory – O(S) for the newly created blocks
+- Time - O(```S * N```), where S is the number of split sites and N is the average block size
+- Memory - O(S) for the newly created blocks
 
 ## Determinism
 

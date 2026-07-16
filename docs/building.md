@@ -16,8 +16,8 @@ Example uses:
 **builder\<MAX_LEN>** holds three private stores:
 
 * **insts** - instructions in program order; every emit() sets real_pc equal to the instruction's index, so real PC doubles as its position
-* **label_map** – label -> index of the instruction the label precedes
-* **label_idx_map** – index -> label, the reverse lookup used when detecting block leaders
+* **label_map** - label -> index of the instruction the label precedes
+* **label_idx_map** - index -> label, the reverse lookup used when detecting block leaders
 
 ## Idea
 
@@ -47,14 +47,14 @@ successors:
 
 Three entry points feed the builder before build() runs:
 
-* **emit(bytes, interp_mode, [prev_realpc], [pc], [jump_to_labels])** – appends one instruction and returns its {real_pc, pc} pair. real_pc is set to the current instruction count, so it always equals the instruction's index; prev_real_pc defaults to real_pc - 1, chaining sequential flow, unless overridden.
-* **emit_label(label)** – records that the next emitted instruction begins label; returns false when the label was already emitted.
-* **connect_edge\<k>(dst_realpc, src_realpc, kind)** – stores one incoming edge on the destination instruction. This is how signaled / SMC transitions get tracked.
+* **emit(bytes, interp_mode, [prev_realpc], [pc], [jump_to_labels])** - appends one instruction and returns its {real_pc, pc} pair. real_pc is set to the current instruction count, so it always equals the instruction's index; prev_real_pc defaults to real_pc - 1, chaining sequential flow, unless overridden.
+* **emit_label(label)** - records that the next emitted instruction begins label; returns false when the label was already emitted.
+* **connect_edge\<k>(dst_realpc, src_realpc, kind)** - stores one incoming edge on the destination instruction. This is how signaled / SMC transitions get tracked.
 
 Outgoing edges (jump_to_labels) live on the source instruction; incoming edges (jump_to_realpc) live on the destination. build() folds both together.
 
-* Time – O(1) per emission
-* Memory – O(N) N instructions
+* Time - O(1) per emission
+* Memory - O(N) N instructions
 
 ### Leader detection (first pass)
 
@@ -65,8 +65,8 @@ build() resets all three outputs, then scans for **leaders**, instructions that 
 * The destination of some edge (its jump_to_realpc is non-empty)
 * The fall-through directly after any branch source (label jump or connect_edge source).
 
-* Time – O(N + E) over instructions and edges
-* Memory – O(L) for the leader set
+* Time - O(N + E) over instructions and edges
+* Memory - O(L) for the leader set
 
 ### Block cutting (second pass)
 
@@ -74,27 +74,27 @@ Instructions between consecutive leaders form one **block\<MAX_LEN>**.
 Each block receives the next running id, its loc (front instruction's virtual PC), inst_count, and interp mode (taken from its first instruction). 
 Every instruction is marked fvalid, then the finished block is keyed into save_data::block_map by its front real PC.
 
-* Time – O(N)
-* Memory – O(N) for the block copies
+* Time - O(N)
+* Memory - O(N) for the block copies
 
 ### Indexing (reuses analyze)
 
 With blocks in place, build() calls the same analyze::analyze(adata, sdata) the loader relies on, so biggest_block_id, sorted_blocks_global_id, real_pc_map, and inst_map come from identical, already-tested code.
 
-* Time – O(N log N) dominated by block sort
-* Memory – O(N)
+* Time - O(N log N) dominated by block sort
+* Memory - O(N)
 
 ### Edge resolution (final pass)
 
 Two edge sources merge into edge_data:
 
-1. **Sequential flow** – every instruction whose prev_real_pc differs from its own real PC (and whose fvalid_prev_real_pc stays set) emits one next edge from prev_real_pc to real_pc, matching the loader's cross-boundary stitching. Clearing fvalid_prev_real_pc, or pointing prev_realpc at the instruction itself, fall-through after unconditional jumps.
-2. **Tracked emissions** – every jump_to_labels entry resolves its label through label_map and emits source -> target; every jump_to_realpc entry emits source -> destination. Both keep their original kind, so signaled / SMC edges stay signaled rather than collapsing into *next*.
+1. **Sequential flow** - every instruction whose prev_real_pc differs from its own real PC (and whose fvalid_prev_real_pc stays set) emits one next edge from prev_real_pc to real_pc, matching the loader's cross-boundary stitching. Clearing fvalid_prev_real_pc, or pointing prev_realpc at the instruction itself, fall-through after unconditional jumps.
+2. **Tracked emissions** - every jump_to_labels entry resolves its label through label_map and emits source -> target; every jump_to_realpc entry emits source -> destination. Both keep their original kind, so signaled / SMC edges stay signaled rather than collapsing into *next*.
 
 Every resolved branch is also inserted into save_data::edge_map as one jmp_loc, so hand-built traces round-trip through save/load like captured ones.
 
-* Time – O(N + E)
-* Memory – O(E) for the successor/predecessor maps
+* Time - O(N + E)
+* Memory - O(E) for the successor/predecessor maps
 
 ## Determinism
 

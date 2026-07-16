@@ -36,8 +36,8 @@ generate_graph iterates analyzed_data::real_pc_map once, adding one vertex per r
 VertexDesc in a local addr_to_vertex lookup. Each vertex's bundled property is the block's block_ptr<MAX_LEN> itself (a boost::shared_ptr), 
 so no block data is copied, the graph just holds references to the same blocks produced by analysis.
 
-* Time – O(V), where V is the number of distinct real PCs
-* Memory – O(V), for the vertex set and the address lookup table
+* Time - O(V), where V is the number of distinct real PCs
+* Memory - O(V), for the vertex set and the address lookup table
 
 ### Edge creation
 
@@ -46,13 +46,13 @@ For each source address it resolves both endpoints through addr_to_vertex;
 if either endpoint wasn't registered as a vertex (the destination address never appeared in real_pc_map, e.g. an edge into code that wasn't captured by the trace), 
 that edge is silently skipped rather than creating a dangling vertex. Surviving edges are added with boost::add_edge(u, v, g).
 
-* Time – O(E), where E is the number of successor edges
-* Memory – O(E), for the edge set added to the graph
+* Time - O(E), where E is the number of successor edges
+* Memory - O(E), for the edge set added to the graph
 
 Combined, building the full graph from already-analyzed data is linear in the size of the trace:
 
-* Time – O(V + E)
-* Memory – O(V + E)
+* Time - O(V + E)
+* Memory - O(V + E)
 
 ## Determinism
 
